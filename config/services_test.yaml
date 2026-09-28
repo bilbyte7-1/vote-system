@@ -1,0 +1,21 @@
+services:
+    App\Tests\:
+        resource: '../tests/'
+        exclude:
+            - '../tests/bootstrap.php'
+
+    App\Application\Interfaces\IdGeneratorInterface:
+        alias: App\Infrastructure\Id\UuidGenerator
+    App\Application\Interfaces\UserRepositoryInterface:
+        alias: App\Tests\Fakers\InMemoryUserRepository
+    App\Application\Interfaces\RefreshTokenRepositoryInterface:
+        alias: App\Tests\Fakers\InMemoryRefreshTokenRepository
+
+    App\Infrastructure\Validation\RequestValidationListener:
+        tags: [ ]
+    App\Infrastructure\Validation\ConcreteValidationStrategySelector:
+        public: true
+        arguments:
+            - !service_locator
+                users_register: '@App\Infrastructure\Validation\Register\RegisterValidationStrategy'
+
