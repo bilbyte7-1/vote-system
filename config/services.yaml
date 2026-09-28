@@ -7,7 +7,11 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
+    refresh_token.ttl: 2592000
 
+when@test:
+    imports:
+        - { resource: 'services_test.yaml' }
 services:
     # default configuration for services in *this* file
     _defaults:
@@ -18,6 +22,34 @@ services:
     # this creates a service per class whose id is the fully-qualified class name
     App\:
         resource: '../src/'
-
+    App\Application\Interfaces\RefreshTokenRepositoryInterface:
+        alias:  App\Infrastructure\DoctrineRepository\RefreshTokenRepository
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+    App\Application\Interfaces\PasswordHasherInterface:
+        alias: App\Infrastructure\Security\VoteSystemPasswordHasher
+    App\Infrastructure\Security\LexikAccessTokenIssuer:
+        arguments:
+            $tokenManager: '@lexik_jwt_authentication.jwt_manager'
+    App\Application\Interfaces\AccessTokenIssuerInterface:
+        alias: App\Infrastructure\Security\LexikAccessTokenIssuer
+    App\Application\RefreshToken\RefreshTokenInitializer:
+        arguments:
+            $ttl: '%refresh_token.ttl%'
+
+    App\Infrastructure\Validation\ErrorResponseListener:
+        tags:
+            - name: kernel.event_listener
+              event: kernel.exception
+              method: onKernelException
+
+    App\Infrastructure\Validation\RequestValidationListener:
+        tags:
+            -   name: kernel.event_listener
+                event: kernel.request
+                method: onKernelRequest
+
+    App\Infrastructure\Validation\ConcreteValidationStrategySelector:
+        arguments:
+            - !service_locator
+                users_register: '@App\Infrastructure\Validation\Register\RegisterValidationStrategy'
