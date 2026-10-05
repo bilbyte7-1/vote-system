@@ -2,9 +2,9 @@
 
 namespace App\Tests;
 
-use App\Domain\User\RefreshToken\RefreshToken;
-use App\Domain\User\RefreshToken\RefreshTokenHash;
-use App\Domain\User\RefreshToken\RefreshTokenId;
+use App\Domain\RefreshToken\RefreshToken;
+use App\Domain\RefreshToken\RefreshTokenHash;
+use App\Domain\RefreshToken\RefreshTokenId;
 use App\Domain\User\UserId;
 use App\Tests\Fakers\InMemoryRefreshTokenRepository;
 use PHPUnit\Framework\TestCase;

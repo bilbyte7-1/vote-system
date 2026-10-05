@@ -8,15 +8,33 @@ class VoteSession
 {
     public function __construct(
         private VoteSessionId $voteSessionId,
-        private Owner $owner,
-        private Status $status,
-        private array $events,
-        private ?Phase $phase = null
+        private OwnerId       $owner,
+        private Phase        $phase,
+        private \DateTimeImmutable $firstPhaseEndsAt,
+        private \DateTimeImmutable $SecondPhaseEndsAt,
+        private ?\DateTimeImmutable $endedAt,
+        private array         $events = [],
     )
     {}
 
     public function addEvent(VoteEvent $voteEvent): void
     {
         $this->events[] = $voteEvent;
+    }
+
+    public function end(
+        \DateTimeImmutable $at,
+    ): void {
+        $this->endedAt = $at;
+    }
+
+    public function getId(): voteSessionId
+    {
+        return $this->voteSessionId;
+    }
+
+    public function getEndedAt(): ?\DateTimeImmutable
+    {
+        return $this->endedAt;
     }
 }

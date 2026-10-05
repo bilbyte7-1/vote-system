@@ -4,7 +4,7 @@ namespace App\Infrastructure\Security\RefreshToken;
 
 use App\Application\Interfaces\RefreshTokenHasherInterface;
 use App\Application\Interfaces\RefreshTokenVerifierInterface;
-use App\Domain\User\RefreshToken\RefreshToken;
+use App\Domain\RefreshToken\RefreshToken;
 use App\Application\Interfaces\RefreshTokenRepositoryInterface;
 use App\Infrastructure\Exceptions\RefreshTokenExpiredException;
 use App\Infrastructure\Exceptions\RefreshTokenNotFoundException;

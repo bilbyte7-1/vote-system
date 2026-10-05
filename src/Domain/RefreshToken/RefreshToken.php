@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Domain\User\RefreshToken;
+namespace App\Domain\RefreshToken;
 
 use App\Domain\User\UserId;
 

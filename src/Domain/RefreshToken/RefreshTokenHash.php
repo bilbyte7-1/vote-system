@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Domain\User\RefreshToken;
+namespace App\Domain\RefreshToken;
 
 final readonly class RefreshTokenHash
 {

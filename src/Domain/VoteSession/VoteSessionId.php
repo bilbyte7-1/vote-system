@@ -2,14 +2,20 @@
 
 namespace App\Domain\VoteSession;
 
+use InvalidArgumentException;
+
 class VoteSessionId
 {
     public function __construct(
-        private int $voteSessionId
+        private string $voteSessionId
     )
-    {}
+    {
+        if ($voteSessionId === '') {
+            throw new InvalidArgumentException('UserId cannot be empty.');
+        }
+    }
 
-    public function getVoteSessionId(): int
+    public function getId(): string
     {
         return $this->voteSessionId;
     }

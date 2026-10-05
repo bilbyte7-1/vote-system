@@ -3,7 +3,7 @@
 namespace App\Tests\Fakers;
 
 use App\Application\Interfaces\RefreshTokenRepositoryInterface;
-use App\Domain\User\RefreshToken\RefreshToken;
+use App\Domain\RefreshToken\RefreshToken;
 use LogicException;
 
 class InMemoryRefreshTokenRepository implements RefreshTokenRepositoryInterface

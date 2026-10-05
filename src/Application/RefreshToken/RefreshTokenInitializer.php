@@ -4,10 +4,10 @@ namespace App\Application\RefreshToken;
 
 use App\Application\Interfaces\IdGeneratorInterface;
 use App\Application\Interfaces\RefreshTokenHasherInterface;
-use App\Domain\User\RefreshToken\RefreshToken;
+use App\Domain\RefreshToken\RefreshToken;
 use App\Domain\User\UserId;
-use App\Domain\User\RefreshToken\RefreshTokenId;
-use App\Domain\User\RefreshToken\RefreshTokenHash;
+use App\Domain\RefreshToken\RefreshTokenId;
+use App\Domain\RefreshToken\RefreshTokenHash;
 use Psr\Clock\ClockInterface;
 
 class RefreshTokenInitializer

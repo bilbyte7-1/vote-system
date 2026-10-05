@@ -2,7 +2,7 @@
 
 namespace App\Application\Interfaces;
 
-use App\Domain\User\RefreshToken\RefreshToken;
+use App\Domain\RefreshToken\RefreshToken;
 
 interface RefreshTokenRepositoryInterface
 {
