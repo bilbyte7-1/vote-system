@@ -2,7 +2,7 @@
 
 namespace App\Application\Authentication;
 
-class RefreshTokenRequest
+final readonly class RefreshTokenRequest
 {
     public function __construct(
         public string $refreshToken,

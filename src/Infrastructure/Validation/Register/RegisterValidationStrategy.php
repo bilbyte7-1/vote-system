@@ -13,8 +13,8 @@ class RegisterValidationStrategy implements RequestValidationStrategyInterface
 {
     public function __construct(
         private readonly ValidatorInterface $validator
-    )
-    {}
+    ) {
+    }
 
     public function validate(Request $request): void
     {

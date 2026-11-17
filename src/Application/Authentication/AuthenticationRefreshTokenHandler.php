@@ -13,16 +13,16 @@ use Psr\Clock\ClockInterface;
 
 class AuthenticationRefreshTokenHandler
 {
-    public function __construct (
+    public function __construct(
         private RefreshTokenVerifierInterface $refreshTokenVerifier,
-        private UserRepositoryInterface       $userRepository,
+        private UserRepositoryInterface $userRepository,
         private AccessTokenIssuerInterface $accessTokenIssuer,
         private RefreshTokenIssuerInterface $refreshTokenIssuer,
         private RefreshTokenInitializer $refreshTokenInitializer,
         private RefreshTokenRepositoryInterface $refreshTokenRepository,
         private ClockInterface $clock,
-    )
-    {}
+    ) {
+    }
 
     public function handle(RefreshTokenRequest $refreshTokenRequest): AuthenticationResult
     {
@@ -46,5 +46,4 @@ class AuthenticationRefreshTokenHandler
             $rawRefreshToken,
         );
     }
-
 }

@@ -8,19 +8,16 @@ use App\Domain\User\User;
 use App\Domain\User\UserId;
 use App\Infrastructure\Security\SymfonyAuthenticationProvider;
 use App\Tests\Fakers\InMemoryUserRepository;
+use App\Tests\Fixtures\UserFixture;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasher;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 class SymfonyAuthenticationProviderTest extends TestCase
 {
-    public function testAuthenticateUser():void
+    public function testAuthenticateUser(): void
     {
-        $user = new User(
-            new UserId('user-id'),
-            new Email('user@example.com'),
-            new Password('hashed-password'),
-        );
+        $user = UserFixture::create();
 
         $plainPassword = 'strong-password';
         $userRepository = new InMemoryUserRepository();

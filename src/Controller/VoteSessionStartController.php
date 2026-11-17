@@ -20,7 +20,7 @@ class VoteSessionStartController
     public function __invoke(
         #[CurrentUser] SymfonySecurityUser $user,
         VoteSessionStartHandler $voteSessionHandler,
-        Request                 $request,
+        Request $request,
     ): Response {
 
         $data = $request->toArray();

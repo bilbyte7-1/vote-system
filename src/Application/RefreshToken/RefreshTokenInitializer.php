@@ -13,17 +13,17 @@ use Psr\Clock\ClockInterface;
 class RefreshTokenInitializer
 {
     public function __construct(
-        private IdGeneratorInterface        $idGenerator,
+        private IdGeneratorInterface $idGenerator,
         private RefreshTokenHasherInterface $refreshTokenHasher,
         private ClockInterface $clock,
         private int $ttl
-    ){
+    ) {
     }
 
     public function initialize(
         UserId $userId,
         string $refreshToken
-    ){
+    ) {
         $createdAt = $this->clock->now();
         $hash = $this->refreshTokenHasher->hash($refreshToken);
 
@@ -35,6 +35,5 @@ class RefreshTokenInitializer
             $createdAt->modify(sprintf('+%d seconds', $this->ttl)),
             null
         );
-
     }
 }

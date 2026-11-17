@@ -8,9 +8,9 @@ use App\Domain\VoteSession\VoteSession;
 class InMemoryVoteSessionRepository implements VoteSessionRepositoryInterface
 {
     public function __construct(
-        private ?VoteSession $savedVoteSession
-    )
-    {}
+        private ?VoteSession $savedVoteSession = null,
+    ) {
+    }
 
     public function existsActiveVoteSession(): bool
     {
@@ -18,7 +18,7 @@ class InMemoryVoteSessionRepository implements VoteSessionRepositoryInterface
             && $this->savedVoteSession->getEndedAt() === null;
     }
 
-    public function save(VoteSession $voteSession)
+    public function save(VoteSession $voteSession): void
     {
         $this->savedVoteSession = $voteSession;
     }

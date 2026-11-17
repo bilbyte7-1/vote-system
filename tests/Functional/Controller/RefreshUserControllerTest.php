@@ -1,6 +1,7 @@
 <?php
 
-namespace App\Tests\Unit\Application\Controller;
+namespace App\Tests\Functional\Controller;
+
 use App\Application\Authentication\AuthenticationRefreshTokenHandler;
 use App\Application\Authentication\AuthenticationResult;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -8,7 +9,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 class RefreshUserControllerTest extends WebTestCase
 {
-    public function testItRefreshTokens(){
+    public function testItRefreshTokens()
+    {
         $client = self::createClient();
 
         $authenticationResult = new AuthenticationResult('access-token', 'refresh-token');

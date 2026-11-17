@@ -9,7 +9,6 @@ readonly class User
         private Email $email,
         private Password $password,
     ) {
-
     }
 
     public function getId(): UserId
@@ -27,4 +26,3 @@ readonly class User
         return $this->password;
     }
 }
-

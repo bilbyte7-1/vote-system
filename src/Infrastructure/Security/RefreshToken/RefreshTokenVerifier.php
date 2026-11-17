@@ -8,6 +8,7 @@ use App\Domain\RefreshToken\RefreshToken;
 use App\Application\Interfaces\RefreshTokenRepositoryInterface;
 use App\Infrastructure\Exceptions\RefreshTokenExpiredException;
 use App\Infrastructure\Exceptions\RefreshTokenNotFoundException;
+use App\Infrastructure\Exceptions\RefreshTokenRevokedException;
 use Psr\Clock\ClockInterface;
 
 class RefreshTokenVerifier implements RefreshTokenVerifierInterface
@@ -16,9 +17,10 @@ class RefreshTokenVerifier implements RefreshTokenVerifierInterface
         private RefreshTokenHasherInterface $refreshTokenHasher,
         private RefreshTokenRepositoryInterface $refreshTokenRepository,
         private ClockInterface $clock,
-    ){}
+    ) {
+    }
 
-    public function verify(string $rawRefreshToken): Refreshtoken
+    public function verify(string $rawRefreshToken): RefreshToken
     {
         $tokenHash = $this->refreshTokenHasher->hash($rawRefreshToken);
 
@@ -30,6 +32,10 @@ class RefreshTokenVerifier implements RefreshTokenVerifierInterface
 
         if ($refreshToken->isExpired($this->clock->now())) {
             throw new RefreshTokenExpiredException();
+        }
+
+        if ($refreshToken->isRevoked()) {
+            throw new RefreshTokenRevokedException();
         }
 
         return $refreshToken;

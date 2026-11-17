@@ -8,15 +8,10 @@ use App\Application\Interfaces\AccessTokenIssuerInterface;
 use App\Application\Interfaces\RefreshTokenIssuerInterface;
 use App\Application\Interfaces\RefreshTokenVerifierInterface;
 use App\Application\RefreshToken\RefreshTokenInitializer;
-use App\Domain\RefreshToken\RefreshToken;
-use App\Domain\RefreshToken\RefreshTokenHash;
-use App\Domain\RefreshToken\RefreshTokenId;
-use App\Domain\User\Email;
-use App\Domain\User\Password;
-use App\Domain\User\User;
-use App\Domain\User\UserId;
 use App\Tests\Fakers\InMemoryRefreshTokenRepository;
 use App\Tests\Fakers\InMemoryUserRepository;
+use App\Tests\Fixtures\RefreshTokenFixture;
+use App\Tests\Fixtures\UserFixture;
 use PHPUnit\Framework\TestCase;
 use Psr\Clock\ClockInterface;
 
@@ -24,7 +19,6 @@ class AuthenticationRefreshTokenHandlerTest extends TestCase
 {
     public function testItRefreshTokenHandler(): void
     {
-        $email = 'user@example.com';
         $rawRefreshToken = 'refresh_token';
         $accessToken = 'access_token';
         $clockStub = self::createStub(ClockInterface::class);
@@ -37,29 +31,14 @@ class AuthenticationRefreshTokenHandlerTest extends TestCase
             $rawRefreshToken,
         );
 
-        $stubRefreshToken = new RefreshToken(
-            new RefreshTokenId('refresh-token-id'),
-            new UserId('user-id'),
-            new refreshTokenHash('refresh-token-hash'),
-            new \DateTimeImmutable('2026-09-17 12:00:00'),
-            new \DateTimeImmutable('2026-10-17 12:00:00'),
-            null
+        $stubRefreshToken = RefreshTokenFixture::create();
+
+        $newStubRefreshToken = RefreshTokenFixture::create(
+            createdAt: new \DateTimeImmutable('2026-10-18 12:00:00'),
+            expiresAt: new \DateTimeImmutable('2026-11-17 12:00:00'),
         );
 
-        $newStubRefreshToken = new RefreshToken(
-            new RefreshTokenId('refresh-token-id'),
-            new UserId('user-id'),
-            new refreshTokenHash('refresh-token-hash'),
-            $clockStub->now(),
-            new \DateTimeImmutable('2026-10-17 12:00:00'),
-            null
-        );
-
-        $stubUser = new User(
-            new UserId('user-id'),
-            new Email($email),
-            new Password('hashed-password'),
-        );
+        $stubUser = UserFixture::create();
 
         $inMemoryRefreshTokenRepository = new InMemoryRefreshTokenRepository($stubRefreshToken);
         $inMemoryUserRepository = new InMemoryUserRepository($stubUser);
@@ -101,6 +80,11 @@ class AuthenticationRefreshTokenHandlerTest extends TestCase
         );
 
         $resultAuthenticationResult = $handler->handle($refreshTokenRequest);
+
+        self::assertSame(
+            $newStubRefreshToken,
+            $inMemoryRefreshTokenRepository->getSavedRefreshToken(),
+        );
 
         self::assertSame(
             $rawRefreshToken,

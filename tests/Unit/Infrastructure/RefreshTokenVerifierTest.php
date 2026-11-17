@@ -4,19 +4,17 @@ namespace App\Tests\Unit\Infrastructure;
 
 use App\Application\Interfaces\RefreshTokenHasherInterface;
 use App\Domain\RefreshToken\RefreshToken;
-use App\Domain\RefreshToken\RefreshTokenHash;
-use App\Domain\RefreshToken\RefreshTokenId;
-use App\Domain\User\UserId;
 use App\Infrastructure\Exceptions\RefreshTokenExpiredException;
 use App\Infrastructure\Exceptions\RefreshTokenNotFoundException;
+use App\Infrastructure\Exceptions\RefreshTokenRevokedException;
 use App\Infrastructure\Security\RefreshToken\RefreshTokenVerifier;
 use App\Tests\Fakers\InMemoryRefreshTokenRepository;
+use App\Tests\Fixtures\RefreshTokenFixture;
 use PHPUnit\Framework\TestCase;
 use Psr\Clock\ClockInterface;
 
 class RefreshTokenVerifierTest extends TestCase
 {
-
     private RefreshToken $stubRefreshToken;
     private InMemoryRefreshTokenRepository $inMemoryRepository;
     private RefreshTokenVerifier $verifier;
@@ -27,14 +25,7 @@ class RefreshTokenVerifierTest extends TestCase
     private \DateTimeImmutable $now;
     public function setUP(): void
     {
-        $this->stubRefreshToken = new RefreshToken(
-            new RefreshTokenId('refresh-token-id'),
-            new UserId('user-id'),
-            new refreshTokenHash('refresh-token-hash'),
-            new \DateTimeImmutable('2026-09-17 12:00:00'),
-            new \DateTimeImmutable('2026-10-17 12:00:00'),
-            null
-        );
+        $this->stubRefreshToken = RefreshTokenFixture::create();
         $this->refreshTokenHasher = self::createMock(RefreshTokenHasherInterface::class);
 
         $this->clock = self::createStub(ClockInterface::class);
@@ -95,6 +86,39 @@ class RefreshTokenVerifierTest extends TestCase
             ->willReturn($this->refreshTokenHash);
 
         $this->expectException(RefreshTokenExpiredException::class);
+        $this->verifier->verify($this->rawRefreshToken);
+    }
+
+    public function testItRejectsRevokedRefreshToken(): void
+    {
+        $this->stubRefreshToken = RefreshTokenFixture::create(
+            revokedAt: new \DateTimeImmutable('2026-09-17 12:05:00 UTC'),
+        );
+
+        $this->inMemoryRepository = new InMemoryRefreshTokenRepository(
+            $this->stubRefreshToken,
+        );
+
+        $this->verifier = new RefreshTokenVerifier(
+            $this->refreshTokenHasher,
+            $this->inMemoryRepository,
+            $this->clock,
+        );
+
+        $this->now = new \DateTimeImmutable('2026-09-17 12:10:00 UTC');
+
+        $this->clock
+            ->method('now')
+            ->willReturn($this->now);
+
+        $this->refreshTokenHasher
+            ->expects(self::once())
+            ->method('hash')
+            ->with($this->rawRefreshToken)
+            ->willReturn($this->refreshTokenHash);
+
+        $this->expectException(RefreshTokenRevokedException::class);
+
         $this->verifier->verify($this->rawRefreshToken);
     }
 }

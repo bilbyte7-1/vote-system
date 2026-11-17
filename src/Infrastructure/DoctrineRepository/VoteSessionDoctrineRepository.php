@@ -9,7 +9,8 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class VoteSessionDoctrineRepository implements VoteSessionRepositoryInterface
 {
-    public function __construct(private EntityManagerInterface $entityManager){
+    public function __construct(private EntityManagerInterface $entityManager)
+    {
     }
     public function existsActiveVoteSession(): bool
     {
@@ -23,7 +24,7 @@ class VoteSessionDoctrineRepository implements VoteSessionRepositoryInterface
                 ->getOneOrNullResult() !== null;
     }
 
-    public function save(VoteSession $voteSession)
+    public function save(VoteSession $voteSession): void
     {
         $this->entityManager->persist($voteSession);
         $this->entityManager->flush();

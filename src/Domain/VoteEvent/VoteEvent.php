@@ -10,6 +10,6 @@ class VoteEvent
         private Id $id,
         private Name $name,
         private \DateTimeImmutable $scheduledAt,
-    )
-    {}
+    ) {
+    }
 }

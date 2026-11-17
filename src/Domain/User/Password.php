@@ -6,8 +6,8 @@ class Password
 {
     public function __construct(
         private string $passwordHash
-    )
-    {}
+    ) {
+    }
 
     public function getPasswordHash(): string
     {

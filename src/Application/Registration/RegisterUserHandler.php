@@ -2,16 +2,14 @@
 
 namespace App\Application\Registration;
 
-use App\Application\Interfaces\UserPersisterInterface;
 use App\Application\Interfaces\UserRepositoryInterface;
 use App\Application\User\UserInitializer;
 use App\Domain\User\User;
 
-
 readonly class RegisterUserHandler
 {
     public function __construct(
-        private UserInitializer         $userInitializer,
+        private UserInitializer $userInitializer,
         private UserRepositoryInterface $userRepository,
     ) {
     }

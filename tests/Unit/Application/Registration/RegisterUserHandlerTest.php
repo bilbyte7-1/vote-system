@@ -10,6 +10,7 @@ use App\Domain\User\Email;
 use App\Domain\User\Password;
 use App\Domain\User\User;
 use App\Domain\User\UserId;
+use App\Tests\Fixtures\UserFixture;
 use PHPUnit\Framework\TestCase;
 
 final class RegisterUserHandlerTest extends TestCase
@@ -17,11 +18,7 @@ final class RegisterUserHandlerTest extends TestCase
     public function testItRegistersUser(): void
     {
         $email = '1@2.com';
-        $user = new User(
-            new UserId('user-id'),
-            new Email($email),
-            new Password('hashed-password'),
-        );
+        $user = UserFixture::create();
 
         $mockUserInitializer = $this->createMock(UserInitializer::class);
         $mockUserInitializer
@@ -56,5 +53,4 @@ final class RegisterUserHandlerTest extends TestCase
             $user
         );
     }
-
 }

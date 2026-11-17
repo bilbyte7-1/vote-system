@@ -27,12 +27,12 @@ class RefreshTokenTest extends TestCase
         $this->expiresAt = new \DateTimeImmutable('2026-10-17 13:00:00');
 
         $this->refreshToken = new RefreshToken(
-           $this->refreshTokenId,
-           $this->userId,
-           $this->refreshTokenHash,
-           $this->createdAt,
-           $this->expiresAt,
-           null
+            $this->refreshTokenId,
+            $this->userId,
+            $this->refreshTokenHash,
+            $this->createdAt,
+            $this->expiresAt,
+            null
         );
     }
 

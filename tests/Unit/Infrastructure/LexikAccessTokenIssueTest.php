@@ -7,6 +7,7 @@ use App\Domain\User\Password;
 use App\Domain\User\User;
 use App\Domain\User\UserId;
 use App\Infrastructure\Security\LexikAccessTokenIssuer;
+use App\Tests\Fixtures\UserFixture;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -15,11 +16,7 @@ class LexikAccessTokenIssueTest extends TestCase
 {
     public function testLexikAccessTokenIssue()
     {
-        $user = new User(
-            new UserId('user-id'),
-            new Email('user@example.com'),
-            new Password('hashed-password')
-        );
+        $user = UserFixture::create();
 
         $stubJwtToken = 'fake-jwt-token';
 
@@ -37,7 +34,5 @@ class LexikAccessTokenIssueTest extends TestCase
         $accessToken = $lexikAccessTokenIssuer->issue($user);
 
         $this->assertSame($stubJwtToken, $accessToken);
-
     }
-
 }

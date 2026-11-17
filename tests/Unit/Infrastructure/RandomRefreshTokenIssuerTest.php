@@ -7,7 +7,7 @@ use PHPUnit\Framework\TestCase;
 
 class RandomRefreshTokenIssuerTest extends TestCase
 {
-    public function testIssueRefreshToken():void
+    public function testIssueRefreshToken(): void
     {
         $refreshToken = new RandomRefreshTokenIssuer();
         $token = $refreshToken->issue();

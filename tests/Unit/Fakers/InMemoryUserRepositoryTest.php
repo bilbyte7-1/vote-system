@@ -1,30 +1,23 @@
 <?php
-namespace App\Tests;
 
-use App\Domain\User\Email;
-use App\Domain\User\Password;
+namespace App\Tests\Unit\Fakers;
+
 use App\Domain\User\User;
-use App\Domain\User\UserId;
 use App\Tests\Fakers\InMemoryUserRepository;
+use App\Tests\Fixtures\UserFixture;
 use PHPUnit\Framework\TestCase;
 
 final class InMemoryUserRepositoryTest extends TestCase
 {
-    private $userRepository;
-    private $user;
-    private $entityManager;
+    private InMemoryUserRepository $userRepository;
+    private User $user;
     protected function setUp(): void
     {
         parent::setUp();
 
         $this->userRepository = new InMemoryUserRepository();
 
-        $this->user = new User(
-            new UserId('user-id'),
-            new Email('user@example.com'),
-            new Password('user-password'),
-        );
-        //$this->entityManager = $this->createMock(EntityManagerInterface::class);
+        $this->user = UserFixture::create();
     }
 
     public function testItSavesUser(): void

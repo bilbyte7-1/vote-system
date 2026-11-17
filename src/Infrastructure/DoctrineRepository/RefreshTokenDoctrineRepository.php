@@ -8,7 +8,8 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class RefreshTokenDoctrineRepository implements RefreshTokenRepositoryInterface
 {
-    public function __construct(private EntityManagerInterface $entityManager){
+    public function __construct(private EntityManagerInterface $entityManager)
+    {
     }
 
     public function save(RefreshToken $refreshToken): void
@@ -17,7 +18,7 @@ class RefreshTokenDoctrineRepository implements RefreshTokenRepositoryInterface
         $this->entityManager->flush();
     }
 
-    public function findByHash(string $hash): RefreshToken
+    public function findByHash(string $hash): ?RefreshToken
     {
         return $this->entityManager
             ->getRepository(RefreshToken::class)

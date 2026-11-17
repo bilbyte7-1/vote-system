@@ -4,18 +4,15 @@ namespace App\Tests\Functional;
 
 use App\Application\Interfaces\RefreshTokenRepositoryInterface;
 use App\Application\Interfaces\UserRepositoryInterface;
-use App\Domain\RefreshToken\RefreshToken;
-use App\Domain\RefreshToken\RefreshTokenHash;
-use App\Domain\RefreshToken\RefreshTokenId;
-use App\Domain\User\Email;
-use App\Domain\User\Password;
-use App\Domain\User\User;
-use App\Domain\User\UserId;
+use App\Tests\Fixtures\RefreshTokenFixture;
+use App\Tests\Fixtures\UserFixture;
 use App\Infrastructure\Security\RefreshToken\Sha256RefreshTokenHasher;
 use App\Tests\Fakers\InMemoryRefreshTokenRepository;
 use App\Tests\Fakers\InMemoryUserRepository;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Clock\ClockInterface;
+use Symfony\Component\Clock\MockClock;
 
 class AuthenticationRefreshTokenFunctionalTest extends WebTestCase
 {
@@ -25,25 +22,21 @@ class AuthenticationRefreshTokenFunctionalTest extends WebTestCase
         $tokenHasher = new Sha256RefreshTokenHasher();
         $tokenHash = $tokenHasher->hash($rawRefreshToken);
 
-        $userStub = new User (
-            new UserId('user-id'),
-            new Email('1@example.com'),
-            new Password('password')
-        );
+        $userStub = UserFixture::create();
 
-        $stubRefreshToken = new RefreshToken(
-            new RefreshTokenId('refresh-token-id'),
-            new UserId('user-id'),
-            new RefreshTokenHash($tokenHash),
-            new \DateTimeImmutable('2026-09-17 12:00:00'),
-            new \DateTimeImmutable('2026-10-17 12:00:00'),
-            null
+        $stubRefreshToken = RefreshTokenFixture::create(
+            tokenHash: $tokenHash,
         );
 
         $userRepo = new InMemoryUserRepository($userStub);
         $tokenRepo = new InMemoryRefreshTokenRepository($stubRefreshToken);
 
         $client = self::createClient();
+
+        self::getContainer()->set(
+            ClockInterface::class,
+            new MockClock('2026-10-01 12:00:00'),
+        );
 
         self::getContainer()->set(
             UserRepositoryInterface::class,
@@ -54,6 +47,7 @@ class AuthenticationRefreshTokenFunctionalTest extends WebTestCase
             RefreshTokenRepositoryInterface::class,
             $tokenRepo,
         );
+
         $client->jsonRequest(
             method: 'POST',
             uri: '/users/refresh',

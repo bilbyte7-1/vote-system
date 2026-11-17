@@ -2,7 +2,7 @@
 
 namespace App\Application\Authentication;
 
-class AuthenticationResult
+final readonly class AuthenticationResult
 {
     public function __construct(
         public string $accessToken,

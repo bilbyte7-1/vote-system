@@ -8,14 +8,13 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class SymfonySecurityUser implements UserInterface, PasswordAuthenticatedUserInterface
 {
-
     public function __construct(
         private User $domainUser
     ) {
     }
     public function getRoles(): array
     {
-        return []; // TODO: Implement getRoles() method.
+        return [];
     }
 
     public function getUserIdentifier(): string
@@ -30,6 +29,5 @@ class SymfonySecurityUser implements UserInterface, PasswordAuthenticatedUserInt
 
     public function eraseCredentials(): void
     {
-        // TODO: Implement eraseCredentials() method.
     }
 }

@@ -13,8 +13,7 @@ class RefreshToken
         private \DateTimeImmutable $createdAt,
         private \DateTimeImmutable $expiresAt,
         private ?\DateTimeImmutable $revokedAt
-    )
-    {
+    ) {
     }
 
     public function getId(): RefreshTokenId

@@ -9,33 +9,18 @@ use App\Application\Interfaces\AuthenticationProviderInterface;
 use App\Application\Interfaces\RefreshTokenIssuerInterface;
 use App\Application\Interfaces\RefreshTokenRepositoryInterface;
 use App\Application\RefreshToken\RefreshTokenInitializer;
-use App\Domain\RefreshToken\RefreshToken;
-use App\Domain\RefreshToken\RefreshTokenHash;
-use App\Domain\RefreshToken\RefreshTokenId;
-use App\Domain\User\Email;
-use App\Domain\User\Password;
-use App\Domain\User\User;
-use App\Domain\User\UserId;
+use App\Tests\Fixtures\RefreshTokenFixture;
+use App\Tests\Fixtures\UserFixture;
 use PHPUnit\Framework\TestCase;
-
 
 class AuthenticationUserHandlerTest extends TestCase
 {
     public function testItAuthenticationUser(): void
     {
-        $user = new User(
-            new UserId('user-id'),
-            new Email('user@example.com'),
-            new Password('hashed-password'),
-        );
+        $user = UserFixture::create();
 
-        $refreshToken = new RefreshToken(
-            new RefreshTokenId('refresh-token-id'),
-            $user->getId(),
-            new RefreshTokenHash('refresh-token-hash'),
-            new \DateTimeImmutable('2026-09-16 12:00:00'),
-            new \DateTimeImmutable('2026-10-16 12:00:00'),
-            null
+        $refreshToken = RefreshTokenFixture::create(
+            userId: $user->getId()->getId(),
         );
 
         $request = new AuthenticationUserRequest(
@@ -96,6 +81,5 @@ class AuthenticationUserHandlerTest extends TestCase
             'refresh-token',
             $authResult->refreshToken
         );
-
     }
 }

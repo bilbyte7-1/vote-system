@@ -43,6 +43,7 @@ final class VoteSessionInitializerTest extends TestCase
             15,
             30,
         );
+
         self::assertEquals($expected, $session);
     }
 }

@@ -9,7 +9,6 @@ use App\Domain\User\UserId;
 
 final class InMemoryUserRepository implements UserRepositoryInterface
 {
-
     public function __construct(
         private ?User $savedUser = null,
     ) {
@@ -28,11 +27,9 @@ final class InMemoryUserRepository implements UserRepositoryInterface
 
     public function findByEmail(string $email): ?User
     {
-        if ($this->savedUser?->getEmail()->getEmail() === $email) {
-            return $this->savedUser;
-        }
-
-        return null;
+        return $this->savedUser?->getEmail()->getEmail() === $email
+            ? $this->savedUser
+            : null;
     }
 
     public function save(User $user): void
@@ -42,10 +39,8 @@ final class InMemoryUserRepository implements UserRepositoryInterface
 
     public function findById(UserId $id): ?User
     {
-        if ($this->savedUser->getId()->getId() === $id->getId())
-        {
-            return $this->savedUser;
-        }
-        return null;
+        return $this->savedUser?->getId()->getId() === $id->getId()
+            ? $this->savedUser
+            : null;
     }
 }

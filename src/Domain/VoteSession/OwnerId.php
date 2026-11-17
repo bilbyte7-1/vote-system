@@ -8,10 +8,9 @@ class OwnerId
 {
     public function __construct(
         private string $ownerId
-    )
-    {
+    ) {
         if ($ownerId === '') {
-            throw new InvalidArgumentException('UserId cannot be empty.');
+            throw new InvalidArgumentException('OwnerId cannot be empty.');
         }
     }
 

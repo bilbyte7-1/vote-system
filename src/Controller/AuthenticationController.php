@@ -4,16 +4,15 @@ namespace App\Controller;
 
 use App\Application\Authentication\AuthenticationUserHandler;
 use App\Application\Authentication\AuthenticationUserRequest;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-final class AuthenticationController extends AbstractController
+final class AuthenticationController
 {
-    public function __construct(private readonly AuthenticationUserHandler $handler){
-
+    public function __construct(private readonly AuthenticationUserHandler $handler)
+    {
     }
 
     #[Route('/login', methods: ['POST'])]
@@ -22,16 +21,16 @@ final class AuthenticationController extends AbstractController
         $data = $request->toArray();
 
         $dto = new AuthenticationUserRequest(
-        email: $data['email'],
-        plainPassword: $data['password'],
+            email: $data['email'],
+            plainPassword: $data['password'],
         );
 
         $authResult = $this->handler->handle($dto);
 
         return new JsonResponse(
             [
-                'accessToken' => $authResult->accessToken,
-                'refreshToken' => $authResult->refreshToken,
+                'access_token' => $authResult->accessToken,
+                'refresh_token' => $authResult->refreshToken,
             ],
             Response::HTTP_OK,
         );

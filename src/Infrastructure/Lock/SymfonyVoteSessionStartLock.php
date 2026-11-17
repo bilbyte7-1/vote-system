@@ -5,8 +5,7 @@ namespace App\Infrastructure\Lock;
 use App\Application\Interfaces\VoteSessionStartLockInterface;
 use Symfony\Component\Lock\LockFactory;
 
-final readonly class SymfonyVoteSessionStartLock
-    implements VoteSessionStartLockInterface
+final readonly class SymfonyVoteSessionStartLock implements VoteSessionStartLockInterface
 {
     public function __construct(
         private LockFactory $lockFactory,

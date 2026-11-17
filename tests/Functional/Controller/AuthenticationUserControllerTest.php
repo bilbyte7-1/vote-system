@@ -1,7 +1,6 @@
 <?php
 
-
-namespace App\Tests\Unit\Application\Controller;
+namespace App\Tests\Functional\Controller;
 
 use App\Application\Authentication\AuthenticationResult;
 use App\Application\Authentication\AuthenticationUserHandler;
@@ -52,9 +51,12 @@ class AuthenticationUserControllerTest extends WebTestCase
             flags: JSON_THROW_ON_ERROR,
         );
 
-        self::assertArrayHasKey('accessToken', $response);
-        self::assertSame('access_token', $response['accessToken']);
-        self::assertArrayHasKey('refreshToken', $response);
-        self::assertSame('refresh_token', $response['refreshToken']);
+        self::assertSame(
+            [
+                'access_token' => 'access_token',
+                'refresh_token' => 'refresh_token',
+            ],
+            $response,
+        );
     }
 }

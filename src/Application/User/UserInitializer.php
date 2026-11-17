@@ -13,9 +13,8 @@ use App\Application\Interfaces\PasswordHasherInterface;
 
 class UserInitializer
 {
-
     public function __construct(
-        private IdGeneratorInterface    $idGenerator,
+        private IdGeneratorInterface $idGenerator,
         private PasswordHasherInterface $passwordHasher,
         private UserRepositoryInterface $userRepository,
     ) {
@@ -28,7 +27,7 @@ class UserInitializer
         }
         return new User(
             new UserId($this->idGenerator->generate()),
-            new Email ($email),
+            new Email($email),
             new Password($this->passwordHasher->hash($plainPassword)),
         );
     }

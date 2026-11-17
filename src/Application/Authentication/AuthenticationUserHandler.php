@@ -11,15 +11,15 @@ use App\Application\RefreshToken\RefreshTokenInitializer;
 readonly class AuthenticationUserHandler
 {
     public function __construct(
-        private readonly AuthenticationProviderInterface  $authenticationProvider,
-        private readonly AccessTokenIssuerInterface       $accessTokenIssuer,
-        private readonly RefreshTokenIssuerInterface      $refreshTokenIssuer,
-        private readonly RefreshTokenInitializer          $refreshTokenInitializer,
-        private readonly  RefreshTokenRepositoryInterface $refreshTokenRepository,
+        private readonly AuthenticationProviderInterface $authenticationProvider,
+        private readonly AccessTokenIssuerInterface $accessTokenIssuer,
+        private readonly RefreshTokenIssuerInterface $refreshTokenIssuer,
+        private readonly RefreshTokenInitializer $refreshTokenInitializer,
+        private readonly RefreshTokenRepositoryInterface $refreshTokenRepository,
     ) {
     }
 
-    public function handle( AuthenticationUserRequest $request ): AuthenticationResult
+    public function handle(AuthenticationUserRequest $request): AuthenticationResult
     {
         $user = $this->authenticationProvider->authenticate(
             $request->email,

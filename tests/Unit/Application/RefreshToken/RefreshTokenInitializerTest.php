@@ -9,22 +9,14 @@ use App\Domain\RefreshToken\RefreshToken;
 use App\Domain\RefreshToken\RefreshTokenHash;
 use App\Domain\RefreshToken\RefreshTokenId;
 use App\Domain\User\UserId;
+use App\Tests\Fixtures\RefreshTokenFixture;
 use PHPUnit\Framework\TestCase;
 use Psr\Clock\ClockInterface;
 
 class RefreshTokenInitializerTest extends TestCase
 {
-    public function testItInitializeRefreshToken():void
+    public function testItInitializeRefreshToken(): void
     {
-        $refreshToken = new RefreshToken(
-            new RefreshTokenId('refresh-token-id'),
-            new UserId('user-id'),
-            new refreshTokenHash('refresh-token-hash'),
-            new \DateTimeImmutable('2026-09-17 12:00:00'),
-            new \DateTimeImmutable('2026-10-17 12:00:00'),
-            null
-        );
-
         $userId = new UserId('user-id');
         $ttl = 2592000;
         $now = new \DateTimeImmutable('2026-09-17 12:00:00 UTC');
@@ -65,6 +57,5 @@ class RefreshTokenInitializerTest extends TestCase
             new \DateTimeImmutable('2026-10-17 12:00:00 UTC'),
             $createdRefreshToken->getExpiresAt()
         );
-
     }
 }

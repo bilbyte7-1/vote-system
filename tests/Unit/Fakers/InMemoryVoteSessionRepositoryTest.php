@@ -1,12 +1,10 @@
 <?php
 
-namespace App\Tests;
+namespace App\Tests\Unit\Fakers;
 
-use App\Domain\VoteSession\OwnerId;
-use App\Domain\VoteSession\Phase;
 use App\Domain\VoteSession\VoteSession;
-use App\Domain\VoteSession\VoteSessionId;
 use App\Tests\Fakers\InMemoryVoteSessionRepository;
+use App\Tests\Fixtures\VoteSessionFixture;
 use PHPUnit\Framework\TestCase;
 
 class InMemoryVoteSessionRepositoryTest extends TestCase
@@ -14,15 +12,7 @@ class InMemoryVoteSessionRepositoryTest extends TestCase
     private VoteSession $voteSession;
     protected function setUp(): void
     {
-        $this->voteSession = new VoteSession(
-            new VoteSessionId('vote-session-id'),
-            new OwnerId('owner-id'),
-            Phase::VOTING,
-            new \DateTimeImmutable('2026-10-02 12:00:00'),
-            new \DateTimeImmutable('2026-10-02 13:00:00'),
-            null,
-            [],
-            );
+        $this->voteSession = VoteSessionFixture::create();
     }
 
     public function testItReturnsInitiallyProvidedVoteSession(): void
@@ -39,7 +29,7 @@ class InMemoryVoteSessionRepositoryTest extends TestCase
 
     public function testItSavesVoteSession(): void
     {
-        $voteSessionRepository = new InMemoryVoteSessionRepository(null);
+        $voteSessionRepository = new InMemoryVoteSessionRepository();
         $voteSessionRepository->save($this->voteSession);
 
         self::assertSame($this->voteSession, $voteSessionRepository->getSavedVoteSession());

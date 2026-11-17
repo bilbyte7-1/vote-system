@@ -20,20 +20,24 @@ class InMemoryRefreshTokenRepository implements RefreshTokenRepositoryInterface
 
     public function findByHash(string $hash): ?RefreshToken
     {
-        if ($this->savedRefreshToken->getTokenHash()->getHash() === $hash)
-        {
-            return $this->savedRefreshToken;
-        }
-        return null;
+        return $this->savedRefreshToken?->getTokenHash()->getHash() === $hash
+            ? $this->savedRefreshToken
+            : null;
     }
 
     public function getSavedRefreshToken(): RefreshToken
     {
         return $this->savedRefreshToken
-            ?? throw new LogicException('No user has been saved.');
+            ?? throw new LogicException('No refresh token has been saved.');
     }
-    public function rotate(RefreshToken $refreshToken, RefreshToken $newRefreshToken): void
-    {
-        // TODO: Implement rotate() method.
+    public function rotate(
+        RefreshToken $refreshToken,
+        RefreshToken $newRefreshToken
+    ): void {
+        if ($this->savedRefreshToken !== $refreshToken) {
+            throw new LogicException('Refresh token not found.');
+        }
+
+        $this->savedRefreshToken = $newRefreshToken;
     }
 }

@@ -3,14 +3,15 @@
 namespace App\Infrastructure\DoctrineRepository;
 
 use App\Application\Interfaces\UserRepositoryInterface;
+use App\Domain\User\Email;
 use App\Domain\User\User;
 use App\Domain\User\UserId;
 use Doctrine\ORM\EntityManagerInterface;
 
-class UserDoctrineRepository  implements UserRepositoryInterface
+class UserDoctrineRepository implements UserRepositoryInterface
 {
     public function __construct(
-        private  EntityManagerInterface $entityManager
+        private EntityManagerInterface $entityManager
     ) {
     }
     public function existsByEmail(string $email): bool
@@ -20,7 +21,7 @@ class UserDoctrineRepository  implements UserRepositoryInterface
                 ->select('1')
                 ->from(User::class, 'u')
                 ->where('u.email = :email')
-                ->setParameter('email', $email)
+                ->setParameter('email', new Email($email), 'email')
                 ->getQuery()
                 ->getOneOrNullResult() !== null;
     }
@@ -30,7 +31,7 @@ class UserDoctrineRepository  implements UserRepositoryInterface
         return $this->entityManager
             ->getRepository(User::class)
             ->findOneBy([
-                'email' => $email,
+                'email' => new Email($email),
             ]);
     }
 
@@ -45,7 +46,7 @@ class UserDoctrineRepository  implements UserRepositoryInterface
         return $this->entityManager
             ->getRepository(User::class)
             ->findOneBy([
-                'id' => $userId->getId(),
+                'id' => $userId,
             ]);
     }
 }

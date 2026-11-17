@@ -4,15 +4,16 @@ namespace App\Controller;
 
 use App\Application\Registration\RegisterUserHandler;
 use App\Application\Registration\RegisterUserRequest;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-final class RegisterUserController extends AbstractController
+final class RegisterUserController
 {
-    public function __construct(private RegisterUserHandler $handler) {}
+    public function __construct(private RegisterUserHandler $handler)
+    {
+    }
 
     #[Route(
         '/users/register',
@@ -21,8 +22,7 @@ final class RegisterUserController extends AbstractController
     )]
     public function __invoke(
         Request $request
-    ): JsonResponse
-    {
+    ): JsonResponse {
         $data = $request->toArray();
 
         $dto = new RegisterUserRequest(

@@ -22,17 +22,18 @@ services:
     # this creates a service per class whose id is the fully-qualified class name
     App\:
         resource: '../src/'
-    App\Application\Interfaces\RefreshTokenRepositoryInterface:
-        alias:  App\Infrastructure\DoctrineRepository\RefreshTokenRepository
-    # add more service definitions when explicit configuration is needed
-    # please note that last definitions always *replace* previous ones
-    App\Application\Interfaces\PasswordHasherInterface:
-        alias: App\Infrastructure\Security\VoteSystemPasswordHasher
+
+    Redis:
+        class: Redis
+        calls:
+            -   connect:
+                    - '%env(REDIS_HOST)%'
+                    - '%env(int:REDIS_PORT)%'
+
     App\Infrastructure\Security\LexikAccessTokenIssuer:
         arguments:
             $tokenManager: '@lexik_jwt_authentication.jwt_manager'
-    App\Application\Interfaces\AccessTokenIssuerInterface:
-        alias: App\Infrastructure\Security\LexikAccessTokenIssuer
+
     App\Application\RefreshToken\RefreshTokenInitializer:
         arguments:
             $ttl: '%refresh_token.ttl%'
@@ -53,3 +54,7 @@ services:
         arguments:
             - !service_locator
                 users_register: '@App\Infrastructure\Validation\Register\RegisterValidationStrategy'
+
+    App\Application\Messages\VoteSessionStartedHandler:
+        tags:
+            - { name: messenger.message_handler }

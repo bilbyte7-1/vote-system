@@ -1,12 +1,10 @@
 <?php
 
-namespace App\Tests;
+namespace App\Tests\Unit\Fakers;
 
 use App\Domain\RefreshToken\RefreshToken;
-use App\Domain\RefreshToken\RefreshTokenHash;
-use App\Domain\RefreshToken\RefreshTokenId;
-use App\Domain\User\UserId;
 use App\Tests\Fakers\InMemoryRefreshTokenRepository;
+use App\Tests\Fixtures\RefreshTokenFixture;
 use PHPUnit\Framework\TestCase;
 
 class InMemoryRefreshTokenRepositoryTest extends TestCase
@@ -15,14 +13,7 @@ class InMemoryRefreshTokenRepositoryTest extends TestCase
     private InMemoryRefreshTokenRepository $inMemoryRefreshTokenRepository;
     protected function setUp(): void
     {
-        $this->refreshToken = new RefreshToken(
-            new RefreshTokenId('refresh-token-id'),
-            new UserId('user-id'),
-            new refreshTokenHash('refresh-token-hash'),
-            new \DateTimeImmutable('2026-09-17 12:00:00'),
-            new \DateTimeImmutable('2026-10-17 12:00:00'),
-            null
-        );
+        $this->refreshToken = RefreshTokenFixture::create();
 
         $this->inMemoryRefreshTokenRepository = new InMemoryRefreshTokenRepository(
             $this->refreshToken
@@ -31,10 +22,13 @@ class InMemoryRefreshTokenRepositoryTest extends TestCase
 
     public function testItSavesRefreshToken(): void
     {
-        $this->inMemoryRefreshTokenRepository->save($this->refreshToken);
+        $repository = new InMemoryRefreshTokenRepository();
+
+        $repository->save($this->refreshToken);
+
         self::assertSame(
             $this->refreshToken,
-            $this->inMemoryRefreshTokenRepository->getSavedRefreshToken()
+            $repository->getSavedRefreshToken(),
         );
     }
 
@@ -45,13 +39,32 @@ class InMemoryRefreshTokenRepositoryTest extends TestCase
             ->findByHash($refreshTokenHash);
         self::assertSame(
             $this->refreshToken->getId()->getId(),
-            $resultRefreshToken->getId()->getId());
+            $resultRefreshToken->getId()->getId()
+        );
     }
 
     public function testItNotFoundByhash(): void
     {
         $refreshTokenHash = 'refresh-token-hash-not-exists';
         $resultRefreshToken = $this->inMemoryRefreshTokenRepository->findByHash($refreshTokenHash);
-        self::assertNull($resultRefreshToken);;
+        self::assertNull($resultRefreshToken);
+    }
+
+    public function testItRotatesRefreshToken(): void
+    {
+        $newRefreshToken = RefreshTokenFixture::create(
+            id: 'new-refresh-token-id',
+            tokenHash: 'new-refresh-token-hash',
+        );
+
+        $this->inMemoryRefreshTokenRepository->rotate(
+            $this->refreshToken,
+            $newRefreshToken,
+        );
+
+        self::assertSame(
+            $newRefreshToken,
+            $this->inMemoryRefreshTokenRepository->getSavedRefreshToken(),
+        );
     }
 }

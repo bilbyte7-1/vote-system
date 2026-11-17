@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Unit\Infrastructure;
+namespace App\Tests\Integration\Infrastructure;
 
 use App\Infrastructure\Validation\ConcreteValidationStrategySelector;
 use App\Infrastructure\Validation\ErrorResponseListener;
@@ -60,7 +60,6 @@ class RequestInputValidationTest extends KernelTestCase
         );
 
         self::assertSame(422, $response->getStatusCode());
-
     }
 
     public function testRequestWithoutValidationStrategy(): void
@@ -109,12 +108,11 @@ class RequestInputValidationTest extends KernelTestCase
 
         $request->attributes->set('_route', $route);
 
-        $event = self::createStub(RequestEvent::class);
-        $event
-            ->method('getRequest')
-            ->willReturn($request);
-
-        return $event;
+        return new RequestEvent(
+            self::$kernel,
+            $request,
+            HttpKernelInterface::MAIN_REQUEST,
+        );
     }
 
     private function getValidationErrorResponse(

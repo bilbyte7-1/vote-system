@@ -13,7 +13,7 @@ final class RefreshUserController
 {
     #[Route('/users/refresh', methods: ['POST'])]
     public function __invoke(
-        Request                           $request,
+        Request $request,
         AuthenticationRefreshTokenHandler $handler,
     ): JsonResponse {
         $data = $request->toArray();
