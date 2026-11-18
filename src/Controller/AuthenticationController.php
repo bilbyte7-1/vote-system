@@ -15,7 +15,11 @@ final class AuthenticationController
     {
     }
 
-    #[Route('/login', methods: ['POST'])]
+    #[Route(
+        '/login',
+        name: 'users_login',
+        methods: ['POST']
+    )]
     public function __invoke(Request $request): JsonResponse
     {
         $data = $request->toArray();

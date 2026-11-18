@@ -18,4 +18,4 @@ services:
         arguments:
             - !service_locator
                 users_register: '@App\Infrastructure\Validation\Register\RegisterValidationStrategy'
-
+                users_login: '@App\Infrastructure\Validation\Authentication\AuthenticationValidationStrategy'
