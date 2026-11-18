@@ -19,3 +19,4 @@ services:
             - !service_locator
                 users_register: '@App\Infrastructure\Validation\Register\RegisterValidationStrategy'
                 users_login: '@App\Infrastructure\Validation\Authentication\AuthenticationValidationStrategy'
+                users_refresh: '@App\Infrastructure\Validation\Authentication\RefreshTokenValidationStrategy'

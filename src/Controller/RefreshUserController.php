@@ -11,7 +11,11 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class RefreshUserController
 {
-    #[Route('/users/refresh', methods: ['POST'])]
+    #[Route(
+        '/users/refresh',
+        name: 'users_refresh',
+        methods: ['POST']
+    )]
     public function __invoke(
         Request $request,
         AuthenticationRefreshTokenHandler $handler,
