@@ -56,6 +56,7 @@ services:
                 users_register: '@App\Infrastructure\Validation\Register\RegisterValidationStrategy'
                 users_login: '@App\Infrastructure\Validation\Authentication\AuthenticationValidationStrategy'
                 users_refresh: '@App\Infrastructure\Validation\Authentication\RefreshTokenValidationStrategy'
+                vote_sessions_start: '@App\Infrastructure\Validation\VoteSessionStart\VoteSessionStartValidationStrategy'
 
     App\Application\Messages\VoteSessionStartedHandler:
         tags:
